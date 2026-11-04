@@ -1,7 +1,7 @@
 # EduAssess – Online Examination & Assessment Platform
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://eduassess-jo01.onrender.com)
-[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shyambalaji27/Online-Examination-System)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shyambalaji27/EduAssess)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
 > 🌐 **Live Application URL:** **[https://eduassess-jo01.onrender.com](https://eduassess-jo01.onrender.com)**
@@ -184,5 +184,5 @@ python -m http.server 8000
 
 **SHYAMBALAJI S**
 - **GitHub**: [@shyambalaji27](https://github.com/shyambalaji27)
-- **Repository**: [Online-Examination-System](https://github.com/shyambalaji27/Online-Examination-System)
+- **Repository**: [EduAssess](https://github.com/shyambalaji27/EduAssess)
 - **Deployment**: [https://eduassess-jo01.onrender.com](https://eduassess-jo01.onrender.com)
