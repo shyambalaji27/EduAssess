@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: online-examination-system
+    env: static
+    buildCommand: ""
+    staticPublishPath: .
