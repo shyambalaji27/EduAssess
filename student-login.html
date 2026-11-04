@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal | EduAssess Online Examination System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <style>
+    .portal-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .portal-tab-btn {
+      flex: 1;
+      padding: 0.75rem 0.5rem;
+      background: none;
+      border: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .portal-tab-btn:hover {
+      color: var(--primary);
+    }
+    .portal-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card" style="max-width: 480px;">
+    <div class="auth-header">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">🎓</div>
+        <span>EduAssess</span>
+      </a>
+      <h2 class="auth-title">Student Portal</h2>
+      <p class="auth-subtitle">Enter with your existing account or join with any custom Name & ID</p>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="portal-tabs">
+      <button type="button" class="portal-tab-btn active" id="tab-login-btn">
+        🚀 Instant Login
+      </button>
+      <button type="button" class="portal-tab-btn" id="tab-register-btn">
+        ✨ New Student Registration
+      </button>
+    </div>
+
+    <!-- TAB 1: INSTANT LOGIN (ANY ID OR EXISTING ID) -->
+    <div id="pane-login">
+      <div id="student-login-error" class="badge badge-danger" style="display:none; width:100%; padding:0.6rem; margin-bottom:1.25rem; text-align:center;"></div>
+
+      <div style="background:var(--primary-light); color:var(--primary); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); font-size:0.825rem; margin-bottom:1.25rem;">
+        💡 <strong>Open Entry:</strong> Enter any Student ID below! If it's your first time, the system will automatically create your profile and let you straight in.
+      </div>
+
+      <form id="student-login-form">
+        <div class="form-group">
+          <label class="form-label" for="student-id">Student ID *</label>
+          <input type="text" id="student-id" class="form-control" placeholder="e.g. STU001 or any custom ID like AKASH01" required autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="student-name-optional">Your Full Name (Optional for first-time login)</label>
+          <input type="text" id="student-name-optional" class="form-control" placeholder="e.g. Akash Sharma" />
+          <small class="text-muted">If this is a new ID, your name will be saved to your report card.</small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="student-password">Password *</label>
+          <div class="input-group">
+            <input type="password" id="student-password" class="form-control" placeholder="Enter password (e.g. Student@123)" required autocomplete="current-password" />
+            <button type="button" class="btn-inline pwd-toggle-btn" data-target="student-password">Show</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.8rem; margin-top:0.5rem;">
+          <span>🚀 Enter Examination Dashboard</span>
+        </button>
+      </form>
+
+      <!-- Quick Demo Autofill Pills -->
+      <div class="demo-account-pills">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); width:100%;">PRE-CONFIGURED DEMO STUDENTS:</span>
+        <button type="button" class="demo-pill-btn" data-demo-user="STU001" data-demo-pass="Student@123" data-demo-name="Alice Smith">
+          👤 STU001 (Alice)
+        </button>
+        <button type="button" class="demo-pill-btn" data-demo-user="STU002" data-demo-pass="Student@123" data-demo-name="Bob Johnson">
+          👤 STU002 (Bob)
+        </button>
+        <button type="button" class="demo-pill-btn" data-demo-user="STU003" data-demo-pass="Student@123" data-demo-name="Charlie Brown">
+          👤 STU003 (Charlie)
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 2: EXPLICIT REGISTRATION FORM (ANY NAME & ID) -->
+    <div id="pane-register" style="display:none;">
+      <div id="student-reg-error" class="badge badge-danger" style="display:none; width:100%; padding:0.6rem; margin-bottom:1.25rem; text-align:center;"></div>
+
+      <form id="student-register-form">
+        <div class="form-group">
+          <label class="form-label" for="reg-student-name">Full Name *</label>
+          <input type="text" id="reg-student-name" class="form-control" placeholder="e.g. John Doe" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-student-id">Choose Student ID *</label>
+          <input type="text" id="reg-student-id" class="form-control" placeholder="e.g. JD2026 or STU100" required />
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-student-dept">Department</label>
+            <select id="reg-student-dept" class="form-select">
+              <option value="Computer Science">Computer Science</option>
+              <option value="Information Technology">Information Technology</option>
+              <option value="Electrical Engineering">Electrical Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-student-year">Year of Study</label>
+            <select id="reg-student-year" class="form-select">
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-student-pwd">Create Password *</label>
+          <div class="input-group">
+            <input type="password" id="reg-student-pwd" class="form-control" placeholder="Choose a password" required />
+            <button type="button" class="btn-inline pwd-toggle-btn" data-target="reg-student-pwd">Show</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success" style="width:100%; padding:0.8rem; margin-top:0.5rem;">
+          <span>✅ Register & Start Examinations</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Navigation links -->
+    <div style="text-align:center; margin-top:2rem; font-size:0.875rem;">
+      <a href="admin-login.html" class="text-primary" style="font-weight:600;">Administrator? Sign in here &rarr;</a>
+      <div style="margin-top:0.75rem;">
+        <a href="index.html" class="text-muted">&larr; Back to Landing Page</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab toggling script
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabLoginBtn = document.getElementById('tab-login-btn');
+      const tabRegBtn = document.getElementById('tab-register-btn');
+      const paneLogin = document.getElementById('pane-login');
+      const paneReg = document.getElementById('pane-register');
+
+      tabLoginBtn.addEventListener('click', () => {
+        tabLoginBtn.classList.add('active');
+        tabRegBtn.classList.remove('active');
+        paneLogin.style.display = 'block';
+        paneReg.style.display = 'none';
+      });
+
+      tabRegBtn.addEventListener('click', () => {
+        tabRegBtn.classList.add('active');
+        tabLoginBtn.classList.remove('active');
+        paneLogin.style.display = 'none';
+        paneReg.style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>

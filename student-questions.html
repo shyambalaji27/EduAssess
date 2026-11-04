@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Question Bank & PDF Resources | EduAssess</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="js/questions-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <style>
+    .practice-q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .practice-q-card:hover {
+      border-color: var(--border-focus);
+      box-shadow: var(--shadow-md);
+    }
+    .solution-drawer {
+      display: none;
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: var(--success-bg);
+      border-left: 4px solid var(--success);
+      border-radius: var(--radius-sm);
+    }
+    .solution-drawer.open {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body style="background-color: var(--bg);">
+
+  <!-- Navbar -->
+  <header class="landing-navbar">
+    <div class="nav-container">
+      <a href="student-dashboard.html" class="brand-logo">
+        <div class="brand-icon">🎓</div>
+        <span>EduAssess Study Portal</span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <a href="student-dashboard.html" class="btn btn-primary btn-sm">&larr; Return to Dashboard</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-content" style="max-width: 1200px; padding: 2rem 1.5rem;">
+    <!-- Welcome Header -->
+    <div class="welcome-banner" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); margin-bottom: 2rem;">
+      <div class="welcome-text">
+        <h2>📚 Student Question Bank & PDF Resources</h2>
+        <p>Prepare for exams with 200 comprehensive practice questions (50 per subject) and official PDF study guides.</p>
+      </div>
+      <div>
+        <a href="student-dashboard.html#available-exams-section" class="btn btn-secondary">⚡ Take an Exam</a>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div style="display:flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; gap: 1rem;">
+      <button type="button" class="btn btn-secondary active" id="btn-tab-questions" style="border-radius: 8px 8px 0 0; font-weight:700;">
+        ❓ Practice Question Bank (200 Questions)
+      </button>
+      <button type="button" class="btn btn-secondary" id="btn-tab-pdfs" style="border-radius: 8px 8px 0 0; font-weight:700;">
+        📄 Official PDF Question Banks
+      </button>
+    </div>
+
+    <!-- TAB 1: INTERACTIVE PRACTICE QUESTIONS -->
+    <section id="section-questions-bank">
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-student-questions" class="form-control" placeholder="Search questions by topic, keyword, or concept..." />
+          </div>
+
+          <div class="filter-group">
+            <select id="filter-student-subject" class="form-select" style="min-width:220px;">
+              <option value="">All Subjects (200 Questions)</option>
+              <option value="Computer Networks">Computer Networks (50 Questions)</option>
+              <option value="Cyber Security">Cyber Security (50 Questions)</option>
+              <option value="Database Management Systems">Database Management Systems (50 Questions)</option>
+              <option value="Operating Systems">Operating Systems (50 Questions)</option>
+            </select>
+
+            <select id="filter-student-diff" class="form-select">
+              <option value="">All Difficulties</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+
+            <span class="badge badge-primary" id="student-q-count-badge">200 Questions</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questions List Container -->
+      <div id="student-questions-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 2: PDF QUESTION BANKS & MATERIALS -->
+    <section id="section-pdfs-bank" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Downloadable PDF Question Banks & Booklets</h3>
+            <p class="text-muted" style="font-size:0.875rem; margin-top:0.25rem;">
+              Full-length PDF study materials and question booklets published by administrators.
+            </p>
+          </div>
+          <span class="badge badge-success" id="student-pdf-count-badge">4 PDFs</span>
+        </div>
+
+        <div class="table-toolbar">
+          <select id="filter-student-pdf-subject" class="form-select" style="max-width:280px;">
+            <option value="">All Subjects</option>
+            <option value="Computer Networks">Computer Networks</option>
+            <option value="Cyber Security">Cyber Security</option>
+            <option value="Database Management Systems">Database Management Systems</option>
+            <option value="Operating Systems">Operating Systems</option>
+          </select>
+        </div>
+
+        <div id="student-pdfs-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem; margin-top:1rem;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PDF Preview Modal -->
+  <div class="modal-overlay" id="student-pdf-modal">
+    <div class="modal-content" style="max-width:900px; height:85vh; display:flex; flex-direction:column;">
+      <div class="modal-header">
+        <h3 id="student-modal-pdf-title">PDF Preview</h3>
+        <button class="btn-close" onclick="document.getElementById('student-pdf-modal').classList.remove('active')">&times;</button>
+      </div>
+      <div class="modal-body" style="flex:1; padding:0;">
+        <iframe id="student-pdf-frame" style="width:100%; height:100%; border:none;"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="document.getElementById('student-pdf-modal').classList.remove('active')">Close</button>
+        <button id="student-modal-pdf-dl" class="btn btn-primary">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.OES_Auth || !window.OES_Auth.checkAuth('student')) return;
+
+      // Tab Toggling
+      const tabQuestionsBtn = document.getElementById('btn-tab-questions');
+      const tabPdfsBtn = document.getElementById('btn-tab-pdfs');
+      const sectionQuestions = document.getElementById('section-questions-bank');
+      const sectionPdfs = document.getElementById('section-pdfs-bank');
+
+      tabQuestionsBtn.addEventListener('click', () => {
+        tabQuestionsBtn.classList.add('active', 'btn-primary');
+        tabQuestionsBtn.classList.remove('btn-secondary');
+        tabPdfsBtn.classList.remove('active', 'btn-primary');
+        tabPdfsBtn.classList.add('btn-secondary');
+        sectionQuestions.style.display = 'block';
+        sectionPdfs.style.display = 'none';
+      });
+
+      tabPdfsBtn.addEventListener('click', () => {
+        tabPdfsBtn.classList.add('active', 'btn-primary');
+        tabPdfsBtn.classList.remove('btn-secondary');
+        tabQuestionsBtn.classList.remove('active', 'btn-primary');
+        tabQuestionsBtn.classList.add('btn-secondary');
+        sectionQuestions.style.display = 'none';
+        sectionPdfs.style.display = 'block';
+        renderStudentPdfs();
+      });
+
+      tabQuestionsBtn.click(); // activate tab 1 by default
+
+      // --- 1. Render Practice Questions ---
+      const searchInput = document.getElementById('search-student-questions');
+      const subjectFilter = document.getElementById('filter-student-subject');
+      const diffFilter = document.getElementById('filter-student-diff');
+      const qContainer = document.getElementById('student-questions-list');
+      const countBadge = document.getElementById('student-q-count-badge');
+
+      function renderStudentQuestions() {
+        const query = (searchInput.value || '').toLowerCase().trim();
+        const subject = subjectFilter.value;
+        const diff = diffFilter.value;
+
+        const allQuestions = window.OES_Storage.getQuestions();
+        const filtered = allQuestions.filter(q => {
+          const matchQuery = (q.text || '').toLowerCase().includes(query) || (q.topic || '').toLowerCase().includes(query) || (q.id || '').toLowerCase().includes(query);
+          const matchSubj = subject ? q.subject === subject : true;
+          const matchDiff = diff ? q.difficulty === diff : true;
+          return matchQuery && matchSubj && matchDiff;
+        });
+
+        countBadge.textContent = `${filtered.length} Questions`;
+
+        if (filtered.length === 0) {
+          qContainer.innerHTML = `<div class="card" style="text-align:center; padding:3rem; color:var(--text-muted);">No questions found matching your filter criteria.</div>`;
+          return;
+        }
+
+        qContainer.innerHTML = filtered.map((q, idx) => {
+          const correctAnswersText = (q.correct || []).join(', ');
+          const drawerId = `drawer-${q.id}`;
+
+          let diffBadge = 'badge-success';
+          if (q.difficulty === 'Medium') diffBadge = 'badge-warning';
+          if (q.difficulty === 'Hard') diffBadge = 'badge-danger';
+
+          return `
+            <div class="practice-q-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span class="badge badge-primary">${q.subject}</span>
+                  <span class="badge ${diffBadge}">${q.difficulty}</span>
+                  <span class="badge badge-secondary">${q.type}</span>
+                </div>
+                <span class="text-muted" style="font-size:0.8rem; font-weight:700;">ID: ${q.id} • ${q.marks || 1} Pt${(q.marks || 1) > 1 ? 's' : ''}</span>
+              </div>
+
+              <div style="font-size:1.1rem; font-weight:700; color:var(--text); line-height:1.45; margin-bottom:1rem;">
+                ${q.text}
+              </div>
+
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:0.6rem; margin-bottom:1rem;">
+                ${(q.options || []).map((opt, i) => `
+                  <div class="option-pill">
+                    <span style="font-weight:700; color:var(--primary);">${String.fromCharCode(65 + i)}.</span>
+                    <span>${opt}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.8rem; color:var(--text-muted);">Topic: <strong>${q.topic || 'General'}</strong></span>
+                <button class="btn btn-sm btn-outline-primary" onclick="toggleSolution('${drawerId}')">
+                  💡 Toggle Answer & Explanation
+                </button>
+              </div>
+
+              <div id="${drawerId}" class="solution-drawer">
+                <div style="font-weight:700; color:#14532D; font-size:0.95rem; margin-bottom:0.35rem;">
+                  ✅ Correct Answer: <span style="text-decoration:underline;">${correctAnswersText}</span>
+                </div>
+                <div style="font-size:0.875rem; color:#15803D;">
+                  <strong>Explanation:</strong> ${q.explanation || 'No detailed explanation provided.'}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.toggleSolution = function(drawerId) {
+        const el = document.getElementById(drawerId);
+        if (el) el.classList.toggle('open');
+      };
+
+      searchInput.addEventListener('input', renderStudentQuestions);
+      subjectFilter.addEventListener('change', renderStudentQuestions);
+      diffFilter.addEventListener('change', renderStudentQuestions);
+      renderStudentQuestions();
+
+      // --- 2. Render PDF Question Banks ---
+      const pdfSubjectFilter = document.getElementById('filter-student-pdf-subject');
+      const pdfsGrid = document.getElementById('student-pdfs-grid');
+      const pdfCountBadge = document.getElementById('student-pdf-count-badge');
+
+      function renderStudentPdfs() {
+        const subject = pdfSubjectFilter.value;
+        const allPdfs = window.OES_Storage.getPdfs();
+        const filtered = allPdfs.filter(p => subject ? p.subject === subject : true);
+
+        pdfCountBadge.textContent = `${filtered.length} PDFs`;
+
+        if (filtered.length === 0) {
+          pdfsGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2.5rem; color:var(--text-muted);">No PDF question banks available for this subject.</div>`;
+          return;
+        }
+
+        pdfsGrid.innerHTML = filtered.map(pdf => `
+          <div class="card exam-card">
+            <div class="exam-card-header">
+              <div>
+                <div class="exam-subject-tag">${pdf.subject}</div>
+                <div class="exam-title-text" style="font-size:1.1rem;">📄 ${pdf.title}</div>
+              </div>
+            </div>
+
+            <p class="text-muted" style="font-size:0.85rem; margin:0.75rem 0; flex:1;">
+              ${pdf.description || 'Official course question bank and reference document.'}
+            </p>
+
+            <div style="font-size:0.8rem; color:var(--text-light); margin-bottom:1rem; display:flex; justify-content:space-between;">
+              <span>Size: <strong>${pdf.fileSize || 'N/A'}</strong></span>
+              <span>Updated: <strong>${pdf.uploadedAt || '2026-01-01'}</strong></span>
+            </div>
+
+            <div style="display:flex; gap:0.5rem;">
+              <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="previewStudentPdf('${pdf.id}')">
+                👁️ Open PDF
+              </button>
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadStudentPdf('${pdf.id}')">
+                📥 Download
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      window.previewStudentPdf = function(id) {
+        const pdf = window.OES_Storage.getPdfById(id);
+        if (!pdf || !pdf.fileData) return;
+
+        document.getElementById('student-modal-pdf-title').textContent = pdf.title;
+        document.getElementById('student-pdf-frame').src = pdf.fileData;
+        document.getElementById('student-modal-pdf-dl').onclick = () => downloadStudentPdf(pdf.id);
+        document.getElementById('student-pdf-modal').classList.add('active');
+      };
+
+      window.downloadStudentPdf = function(id) {
+        const pdf = window.OES_Storage.getPdfById(id);
+        if (!pdf || !pdf.fileData) return;
+
+        const link = document.createElement('a');
+        link.href = pdf.fileData;
+        link.download = pdf.fileName || `${pdf.title.replace(/\s+/g, '_')}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.OES_App.showToast(`Downloading "${pdf.title}"...`, 'info');
+      };
+
+      pdfSubjectFilter.addEventListener('change', renderStudentPdfs);
+      renderStudentPdfs();
+    });
+  </script>
+</body>
+</html>

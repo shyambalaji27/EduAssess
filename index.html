@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Examination and Assessment System | EduAssess</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="js/questions-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header class="landing-navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">📝</div>
+        <span>EduAssess</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#howitworks" class="nav-link">How It Works</a></li>
+        <li><a href="#about" class="nav-link">About Platform</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <a href="student-login.html" class="btn btn-secondary btn-sm">Student Portal</a>
+        <a href="admin-login.html" class="btn btn-primary btn-sm">Admin Portal</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div style="max-width: 960px; margin: 0 auto;">
+      <div class="hero-badge">
+        <span>✨ Client-Side Static Architecture</span>
+        <span>•</span>
+        <span>Zero Backend Needed</span>
+      </div>
+
+      <h1 class="hero-title">
+        Next-Generation <span>Online Examination</span> & Assessment Platform
+      </h1>
+
+      <p class="hero-desc">
+        A robust, fully client-side examination solution featuring automated evaluation, real-time proctored timers, individual student analytics, and administrative scheduling powered purely by browser LocalStorage.
+      </p>
+
+      <div class="hero-cta">
+        <a href="student-login.html" class="btn btn-primary btn-lg">
+          <span>🎓 Student Login</span>
+        </a>
+        <a href="admin-login.html" class="btn btn-secondary btn-lg">
+          <span>🛡️ Admin Dashboard</span>
+        </a>
+      </div>
+
+      <!-- Quick Demo Credentials Box -->
+      <div class="demo-banner">
+        <div class="demo-item">
+          <span class="demo-title">🛡️ Admin Demo</span>
+          <span class="demo-detail">User: <strong>admin</strong> | Pass: <strong>Admin@123</strong></span>
+        </div>
+        <div class="demo-item">
+          <span class="demo-title">🎓 Student Demos (Password: Student@123)</span>
+          <span class="demo-detail"><strong>STU001</strong> (Alice) • <strong>STU002</strong> (Bob) • <strong>STU003</strong> (Charlie)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features Section -->
+  <section id="features" style="padding: 5rem 2rem; max-width: 1280px; margin: 0 auto; text-align: center;">
+    <span class="badge badge-primary">Comprehensive Features</span>
+    <h2 style="font-size: 2.25rem; font-weight: 800; margin: 0.75rem 0 1rem;">Engineered for Seamless Academic Assessments</h2>
+    <p class="text-muted" style="max-width: 600px; margin: 0 auto 3rem;">
+      From flexible question authoring to instantaneous scorecards, everything runs effortlessly inside your browser.
+    </p>
+
+    <div class="features-grid">
+      <div class="card feature-card">
+        <div class="feature-icon-wrapper">⏱️</div>
+        <h3 class="feature-title">Real-Time Proctored Timer</h3>
+        <p class="feature-desc">Interactive countdown timer with warning alerts, auto-submission upon expiry, and seamless recovery across page refreshes.</p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-wrapper">⚡</div>
+        <h3 class="feature-title">Instant Automatic Evaluation</h3>
+        <p class="feature-desc">Automated scoring engine supporting Multiple Choice, True/False, and complex Multiple-Select questions with strict set verification.</p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-wrapper">🎨</div>
+        <h3 class="feature-title">5-State Question Palette</h3>
+        <p class="feature-desc">Color-coded question navigation indicating Answered, Not Answered, Not Visited, Marked for Review, and Answered & Marked.</p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-wrapper">📊</div>
+        <h3 class="feature-title">Visual Analytics & Reports</h3>
+        <p class="feature-desc">Performance charts via Chart.js, pass/fail distributions, downloadable candidate answer sheets, and one-click CSV export.</p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-wrapper">🔒</div>
+        <h3 class="feature-title">Role-Based Access Control</h3>
+        <p class="feature-desc">Strict separation between Admin and Student sessions. Students can only review their own scores and attempts.</p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-wrapper">💾</div>
+        <h3 class="feature-title">Robust LocalStorage Persistence</h3>
+        <p class="feature-desc">Complete database-free operation. Full JSON backup and restore capabilities ensure zero data loss across sessions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="howitworks" style="padding: 5rem 2rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+      <span class="badge badge-secondary">Workflow</span>
+      <h2 style="font-size: 2.25rem; font-weight: 800; margin: 0.75rem 0 3rem;">How EduAssess Operates</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; text-align: left;">
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div style="font-size: 2rem; font-weight: 900; color: var(--primary); margin-bottom: 0.5rem;">01</div>
+          <h4 style="margin-bottom: 0.5rem;">Admin Sets Up Exam</h4>
+          <p class="text-muted" style="font-size: 0.9rem;">Author questions in the Question Bank, define marks, set duration, schedule windows, and publish exams.</p>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--secondary);">
+          <div style="font-size: 2rem; font-weight: 900; color: var(--secondary); margin-bottom: 0.5rem;">02</div>
+          <h4 style="margin-bottom: 0.5rem;">Student Attends Exam</h4>
+          <p class="text-muted" style="font-size: 0.9rem;">Students log in with their Student ID, review guidelines, and take timed examinations with live question palette tracking.</p>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--success);">
+          <div style="font-size: 2rem; font-weight: 900; color: var(--success); margin-bottom: 0.5rem;">03</div>
+          <h4 style="margin-bottom: 0.5rem;">Automatic Evaluation</h4>
+          <p class="text-muted" style="font-size: 0.9rem;">Upon submission or time expiration, the JS engine calculates obtained marks, percentage, and pass/fail status immediately.</p>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--purple);">
+          <div style="font-size: 2rem; font-weight: 900; color: var(--purple); margin-bottom: 0.5rem;">04</div>
+          <h4 style="margin-bottom: 0.5rem;">Review & Export</h4>
+          <p class="text-muted" style="font-size: 0.9rem;">Students view question-by-question explanations; administrators inspect cohort analytics and download CSV reports.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" style="padding: 5rem 2rem; max-width: 900px; margin: 0 auto; text-align: center;">
+    <span class="badge badge-info">Pure Frontend Engineering</span>
+    <h2 style="font-size: 2rem; font-weight: 800; margin: 0.75rem 0 1rem;">100% Client-Side Web Application</h2>
+    <p class="text-muted" style="font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
+      EduAssess is constructed strictly adhering to frontend standards using HTML5, CSS3, Vanilla JavaScript, and the Browser’s Storage API. It requires no Node.js backend, no SQL database, and no server APIs, making it immediately deployable to GitHub Pages, Netlify, or any static hosting service.
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <a href="student-login.html" class="btn btn-primary">Take an Examination</a>
+      <a href="admin-login.html" class="btn btn-secondary">Explore Admin Dashboard</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="brand-logo">
+        <div class="brand-icon">📝</div>
+        <span>EduAssess Online Examination System</span>
+      </div>
+      <p class="footer-copy">
+        &copy; 2026 Online Examination and Assessment System. Built with Vanilla JavaScript & LocalStorage. All rights reserved.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

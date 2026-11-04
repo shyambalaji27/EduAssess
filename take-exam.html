@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Examination Session | EduAssess</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/exam.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="js/questions-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/evaluation.js"></script>
+  <script src="js/exam-engine.js"></script>
+</head>
+<body style="background-color: var(--bg);">
+
+  <!-- Exam Header Bar -->
+  <header class="exam-header">
+    <div class="exam-header-title">
+      <h1 id="exam-room-title">Assessment</h1>
+      <span id="exam-room-subject">Subject Information</span>
+    </div>
+
+    <!-- Countdown Timer -->
+    <div id="timer-wrapper" class="exam-timer-wrapper">
+      <span class="timer-icon">⏱️</span>
+      <span id="timer-countdown" class="timer-digits">00:00:00</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <div style="text-align:right;" class="no-print">
+        <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); display:block;">Candidate</span>
+        <strong id="exam-room-student" style="font-size:0.9rem; color:var(--text);">Student</strong>
+      </div>
+      <button id="btn-finish-exam" class="btn btn-danger btn-sm">
+        🏁 Submit Examination
+      </button>
+    </div>
+  </header>
+
+  <!-- Exam Main Interface -->
+  <main class="exam-body">
+    <!-- Center: Question Container -->
+    <section class="question-container">
+      <div>
+        <div class="question-top-bar">
+          <div>
+            <span id="q-current-num" class="question-num-badge">Question 1</span>
+            <span id="q-current-type" class="badge badge-secondary" style="margin-left:0.5rem;">Multiple Choice</span>
+          </div>
+          <span id="q-current-marks" class="badge badge-primary">1 Mark</span>
+        </div>
+
+        <div id="q-current-text" class="question-text">
+          Loading question text...
+        </div>
+
+        <!-- Options Container -->
+        <div id="q-options-container" class="options-list">
+          <!-- Options rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="question-footer">
+        <div style="display:flex; gap:0.5rem;">
+          <button id="btn-clear-resp" class="btn btn-secondary btn-sm" title="Clear chosen answer for this question">
+            🧹 Clear Response
+          </button>
+          <button id="btn-mark-review" class="btn btn-secondary btn-sm" title="Flag this question to review later">
+            ☆ Mark for Review
+          </button>
+        </div>
+
+        <div class="nav-buttons-group">
+          <button id="btn-prev-q" class="btn btn-secondary">
+            &larr; Previous
+          </button>
+          <button id="btn-next-q" class="btn btn-primary">
+            Save & Next &rarr;
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Question Palette -->
+    <aside class="palette-container">
+      <h3 class="palette-title">Question Palette</h3>
+
+      <!-- Status Legend -->
+      <div class="palette-legend">
+        <div class="legend-item">
+          <span class="status-dot dot-answered"></span>
+          <span>Answered (<strong id="count-answered">0</strong>)</span>
+        </div>
+        <div class="legend-item">
+          <span class="status-dot dot-not-answered"></span>
+          <span>Not Answered (<strong id="count-not-answered">0</strong>)</span>
+        </div>
+        <div class="legend-item">
+          <span class="status-dot dot-not-visited"></span>
+          <span>Not Visited (<strong id="count-not-visited">0</strong>)</span>
+        </div>
+        <div class="legend-item">
+          <span class="status-dot dot-marked-review"></span>
+          <span>Marked Review (<strong id="count-marked-review">0</strong>)</span>
+        </div>
+        <div class="legend-item" style="grid-column: 1 / -1;">
+          <span class="status-dot dot-answered-review"></span>
+          <span>Answered & Review (<strong id="count-answered-review">0</strong>)</span>
+        </div>
+      </div>
+
+      <!-- Question Numbers Grid -->
+      <div id="palette-numbers-grid" class="palette-grid">
+        <!-- Rendered by exam-engine.js -->
+      </div>
+
+      <div style="border-top:1px solid var(--border); padding-top:1rem; text-align:center;">
+        <button onclick="document.getElementById('btn-finish-exam').click()" class="btn btn-outline-primary btn-sm" style="width:100%;">
+          Submit All Answers
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Submission Confirmation Modal -->
+  <div class="modal-overlay" id="exam-submission-modal">
+    <div class="modal-content" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>Confirm Final Submission</h3>
+        <button class="btn-close" id="btn-cancel-submission">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="color:var(--text-muted); margin-bottom:1.25rem;">
+          Are you sure you wish to submit your examination? Once submitted, your answers cannot be altered.
+        </p>
+
+        <!-- Summary Matrix -->
+        <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Total Questions</div>
+            <div id="sub-total-q" style="font-size:1.5rem; font-weight:800; color:var(--text);">0</div>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Answered</div>
+            <div id="sub-answered-q" style="font-size:1.5rem; font-weight:800; color:var(--success);">0</div>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Unanswered</div>
+            <div id="sub-unanswered-q" style="font-size:1.5rem; font-weight:800; color:var(--danger);">0</div>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Marked Review</div>
+            <div id="sub-review-q" style="font-size:1.5rem; font-weight:800; color:var(--purple);">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="document.getElementById('exam-submission-modal').classList.remove('active')">
+          Return to Exam
+        </button>
+        <button id="btn-confirm-submission" class="btn btn-danger">
+          Yes, Submit Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

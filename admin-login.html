@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | EduAssess Online Examination System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">🛡️</div>
+        <span>EduAssess</span>
+      </a>
+      <h2 class="auth-title">Administrator Portal</h2>
+      <p class="auth-subtitle">Sign in to manage questions, exams & reports</p>
+    </div>
+
+    <div id="admin-login-error" class="badge badge-danger" style="display:none; width:100%; padding:0.6rem; margin-bottom:1.25rem; text-align:center;"></div>
+
+    <form id="admin-login-form">
+      <div class="form-group">
+        <label class="form-label" for="admin-username">Admin Username</label>
+        <input type="text" id="admin-username" class="form-control" placeholder="e.g. admin" required autocomplete="username" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="admin-password">Password</label>
+        <div class="input-group">
+          <input type="password" id="admin-password" class="form-control" placeholder="Enter password" required autocomplete="current-password" />
+          <button type="button" class="btn-inline pwd-toggle-btn" data-target="admin-password">Show</button>
+        </div>
+      </div>
+
+      <div class="form-check" style="margin-bottom:1.5rem;">
+        <input type="checkbox" id="admin-remember" checked />
+        <label for="admin-remember" style="font-size:0.875rem; color:var(--text-muted); cursor:pointer;">Remember this browser</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:0.8rem;">
+        <span>🔐 Sign In to Admin Console</span>
+      </button>
+    </form>
+
+    <!-- Quick Demo Autofill -->
+    <div class="demo-account-pills">
+      <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); width:100%;">QUICK DEMO LOGIN:</span>
+      <button type="button" class="demo-pill-btn" data-demo-user="admin" data-demo-pass="Admin@123">
+        ⚡ Autofill: admin / Admin@123
+      </button>
+    </div>
+
+    <div style="text-align:center; margin-top:2rem; font-size:0.875rem;">
+      <a href="student-login.html" class="text-primary" style="font-weight:600;">Are you a student? Switch to Student Login &rarr;</a>
+      <div style="margin-top:0.75rem;">
+        <a href="index.html" class="text-muted">&larr; Back to Landing Page</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

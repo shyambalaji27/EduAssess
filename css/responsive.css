@@ -1,0 +1,205 @@
+/* ==========================================================================
+   ONLINE EXAMINATION AND ASSESSMENT SYSTEM - RESPONSIVE STYLESHEET
+   Mobile, Tablet, and Desktop Breakpoints
+   ========================================================================== */
+
+/* Large Tablets & Small Laptops (< 1024px) */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .exam-body {
+    grid-template-columns: 1fr 280px;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+/* Tablets (< 768px) */
+@media (max-width: 768px) {
+  /* Navigation */
+  .nav-menu {
+    display: none;
+  }
+  
+  .hero-title {
+    font-size: 2.25rem;
+  }
+  
+  .hero-desc {
+    font-size: 1rem;
+  }
+  
+  .hero-section {
+    padding: 3rem 1rem 2rem;
+  }
+
+  /* Sidebar Drawer on Mobile */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.mobile-open {
+    left: 0;
+  }
+
+  /* Backdrop for mobile sidebar */
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+  }
+
+  .sidebar-backdrop.active {
+    display: block;
+  }
+
+  .mobile-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  .welcome-banner {
+    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .welcome-banner::after {
+    display: none;
+  }
+
+  /* Examination Screen on Mobile */
+  .exam-body {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .palette-container {
+    position: relative;
+    top: 0;
+    width: 100%;
+  }
+
+  .palette-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .exam-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .exam-header-title h1 {
+    font-size: 1rem;
+  }
+
+  .timer-digits {
+    font-size: 1.15rem;
+  }
+
+  .question-container {
+    padding: 1.25rem;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+  }
+
+  .question-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-buttons-group {
+    justify-content: space-between;
+  }
+
+  /* Tables & Toolbars */
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    max-width: 100%;
+  }
+
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .score-large-text {
+    font-size: 3rem;
+  }
+}
+
+/* Small Smartphones (< 480px) */
+@media (max-width: 480px) {
+  .palette-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .palette-legend {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .demo-banner {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .exam-meta-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print Stylesheet for Reports */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  .sidebar, .top-navbar, .theme-toggle-btn, .btn, .no-print {
+    display: none !important;
+  }
+
+  .main-wrapper, .dashboard-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .card, .result-hero-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .data-table th, .data-table td {
+    border: 1px solid #CCCCCC !important;
+  }
+}
+
