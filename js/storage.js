@@ -14,7 +14,8 @@
     RESULTS: 'oes_exam_results',
     ACTIVE_SESSION: 'oes_active_session',
     SETTINGS: 'oes_app_settings',
-    PDFS: 'oes_pdf_question_banks'
+    PDFS: 'oes_pdf_question_banks',
+    VIDEOS: 'oes_video_modules'
   };
 
   // Safe JSON Parsing Helper
@@ -26,6 +27,13 @@
       console.error('OES Storage Parse Error:', err);
       return fallback;
     }
+  }
+
+  
+  function extractYoutubeId(url) {
+    if (!url) return '';
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    return match ? match[1] : '';
   }
 
   // Generic Get & Save
@@ -287,7 +295,293 @@
       setItem(STORAGE_KEYS.PDFS, demoPdfs);
     }
 
-    // 6. Settings
+    
+    // 6. Seed Video Modules for all Subjects
+    if (force || !localStorage.getItem(STORAGE_KEYS.VIDEOS)) {
+      const demoVideos = [
+        // Computer Networks
+        {
+          id: 'VID-CN-01',
+          subject: 'Computer Networks',
+          moduleNumber: 1,
+          moduleTitle: 'Module 1: OSI 7-Layer Architecture & TCP/IP Model',
+          topic: 'Layer 1 to Layer 7 Protocols, Encapsulation & Packet Flow',
+          description: 'Master the fundamental architecture of modern computer networking, OSI layers, and TCP/IP protocol suite.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=IPvYjXCsTg8',
+          duration: '1 hr 45 mins',
+          instructor: 'freeCodeCamp'
+        },
+        {
+          id: 'VID-CN-02',
+          subject: 'Computer Networks',
+          moduleNumber: 2,
+          moduleTitle: 'Module 2: IPv4 Addressing, Subnetting & CIDR Calculations',
+          topic: 'Subnet Masks, Slash Notation, Network & Broadcast IDs',
+          description: 'Step-by-step visual tutorial on binary subnetting, CIDR notation, and IP address allocation.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=ecC38311k6s',
+          duration: '35 mins',
+          instructor: 'NetworkChuck'
+        },
+        {
+          id: 'VID-CN-03',
+          subject: 'Computer Networks',
+          moduleNumber: 3,
+          moduleTitle: 'Module 3: Routing Protocols (RIP, OSPF, BGP) & Algorithms',
+          topic: 'Dijkstra SPF, Distance Vector, Autonomous Systems',
+          description: 'Comprehensive breakdown of interior and exterior gateway routing protocols across internetworks.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=rYod3DeeIl4',
+          duration: '42 mins',
+          instructor: 'Cisco Networking Guide'
+        },
+        {
+          id: 'VID-CN-04',
+          subject: 'Computer Networks',
+          moduleNumber: 4,
+          moduleTitle: 'Module 4: Transport Layer Protocols (TCP vs UDP)',
+          topic: 'TCP 3-Way Handshake, Flow Control & Congestion Windows',
+          description: 'Deep dive into connection-oriented TCP guarantees, sequence numbering, and UDP datagram sockets.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=uwoD5YsGACg',
+          duration: '28 mins',
+          instructor: 'Computer Science Lessons'
+        },
+        {
+          id: 'VID-CN-05',
+          subject: 'Computer Networks',
+          moduleNumber: 5,
+          moduleTitle: 'Module 5: Application Layer (DNS, HTTP/HTTPS, DHCP)',
+          topic: 'Name Resolution, TLS Handshake, Port Numbers',
+          description: 'Understand how DNS queries resolve, how SSL/TLS secures web traffic, and dynamic host configuration.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=27r4BsXZ1J0',
+          duration: '32 mins',
+          instructor: 'PowerCert Animated Videos'
+        },
+        {
+          id: 'VID-CN-06',
+          subject: 'Computer Networks',
+          moduleNumber: 6,
+          moduleTitle: 'Module 6: Network Security, Firewalls & VPNs',
+          topic: 'Packet Filtering, State inspection, IPsec Tunneling',
+          description: 'Core concepts of network defense, perimeter firewalls, DMZ architecture, and encrypted tunneling.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=inWWhr5tnEA',
+          duration: '38 mins',
+          instructor: 'Eli the Computer Guy'
+        },
+
+        // Cyber Security
+        {
+          id: 'VID-CS-01',
+          subject: 'Cyber Security',
+          moduleNumber: 1,
+          moduleTitle: 'Module 1: Information Security & CIA Triad Fundamentals',
+          topic: 'Confidentiality, Integrity, Availability & Threat Models',
+          description: 'Foundational principles of cybersecurity, threat taxonomy, risk assessment, and security controls.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=U_P23SqJaDc',
+          duration: '2 hrs 10 mins',
+          instructor: 'freeCodeCamp'
+        },
+        {
+          id: 'VID-CS-02',
+          subject: 'Cyber Security',
+          moduleNumber: 2,
+          moduleTitle: 'Module 2: Cryptography (Symmetric, Asymmetric & Hashing)',
+          topic: 'AES, DES, RSA Public Key, SHA-256, Digital Signatures',
+          description: 'Learn mathematical foundations of modern cryptography, key exchanges, and digital certificates.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=jhXCTbFnK8o',
+          duration: '45 mins',
+          instructor: 'Gate Smashers'
+        },
+        {
+          id: 'VID-CS-03',
+          subject: 'Cyber Security',
+          moduleNumber: 3,
+          moduleTitle: 'Module 3: Network Attacks (MITM, DoS/DDoS, ARP Spoofing)',
+          topic: 'Packet Interception, Amplification Attacks, Session Hijacking',
+          description: 'Detailed technical analysis of classic network attacks and hands-on packet capture defense strategies.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=-enHfpM-jdY',
+          duration: '30 mins',
+          instructor: 'NetworkChuck'
+        },
+        {
+          id: 'VID-CS-04',
+          subject: 'Cyber Security',
+          moduleNumber: 4,
+          moduleTitle: 'Module 4: Web Security & OWASP Top 10 (SQLi, XSS, CSRF)',
+          topic: 'Injection Attacks, Cross-Site Scripting, Parameterized Queries',
+          description: 'In-depth exploration of the most prevalent web application vulnerabilities and prevention standards.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=2_lswM1S264',
+          duration: '50 mins',
+          instructor: 'freeCodeCamp'
+        },
+        {
+          id: 'VID-CS-05',
+          subject: 'Cyber Security',
+          moduleNumber: 5,
+          moduleTitle: 'Module 5: Defensive Architectures (Firewalls, WAF, IDS/IPS)',
+          topic: 'Layer 7 Filtering, Signature vs Anomaly Detection, SIEM',
+          description: 'Building multi-tiered security operations centers, firewall configurations, and intrusion prevention.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=kDEX1HXybrk',
+          duration: '36 mins',
+          instructor: 'Cyber Security Academy'
+        },
+        {
+          id: 'VID-CS-06',
+          subject: 'Cyber Security',
+          moduleNumber: 6,
+          moduleTitle: 'Module 6: Ethical Hacking & Penetration Testing Workflow',
+          topic: 'Reconnaissance, Scanning, Exploitation & Reporting',
+          description: 'End-to-end guide to penetration testing methodologies, vulnerability discovery, and remediation.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=3Kq1MIfTWCE',
+          duration: '1 hr 15 mins',
+          instructor: 'Edureka'
+        },
+
+        // Database Management Systems
+        {
+          id: 'VID-DB-01',
+          subject: 'Database Management Systems',
+          moduleNumber: 1,
+          moduleTitle: 'Module 1: Database Architecture & Relational Model Basics',
+          topic: 'Three-Schema Architecture, Schemas, Instances & Tuples',
+          description: 'Foundations of database systems, physical vs logical data independence, and relational definitions.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=kBdlM6hNDAE',
+          duration: '1 hr 20 mins',
+          instructor: 'freeCodeCamp'
+        },
+        {
+          id: 'VID-DB-02',
+          subject: 'Database Management Systems',
+          moduleNumber: 2,
+          moduleTitle: 'Module 2: Entity-Relationship (ER) Diagrams & Relational Algebra',
+          topic: 'Entities, Relationships, Cardinality & Select/Project/Join',
+          description: 'Conceptual data modeling with ER diagrams and mathematical foundation of relational query operations.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=4Z9KEBexzcc',
+          duration: '40 mins',
+          instructor: 'Gate Smashers'
+        },
+        {
+          id: 'VID-DB-03',
+          subject: 'Database Management Systems',
+          moduleNumber: 3,
+          moduleTitle: 'Module 3: SQL Mastery (DDL, DML, Joins, Subqueries & Aggregation)',
+          topic: 'SELECT, INNER/LEFT/RIGHT JOIN, GROUP BY, HAVING',
+          description: 'Master structured query language with practical examples across complex multi-table queries.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=HXV3zeRR3h4',
+          duration: '1 hr 05 mins',
+          instructor: 'Programming with Mosh'
+        },
+        {
+          id: 'VID-DB-04',
+          subject: 'Database Management Systems',
+          moduleNumber: 4,
+          moduleTitle: 'Module 4: Database Normalization (1NF, 2NF, 3NF, BCNF)',
+          topic: 'Functional Dependencies, Prime Attributes, Lossless Joins',
+          description: 'Eliminate data anomalies and redundancies using step-by-step normal form decompositions.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=UrYLYV7WSHM',
+          duration: '48 mins',
+          instructor: 'Knowledge Gate'
+        },
+        {
+          id: 'VID-DB-05',
+          subject: 'Database Management Systems',
+          moduleNumber: 5,
+          moduleTitle: 'Module 5: Transactions, Concurrency Control & ACID Properties',
+          topic: 'Atomicity, Consistency, Isolation, Durability, 2PL, Deadlocks',
+          description: 'Understand schedules, serializability, lock-based protocols, and crash recovery with write-ahead logs.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=r0bKqZ5E2eI',
+          duration: '52 mins',
+          instructor: 'Gate Smashers'
+        },
+        {
+          id: 'VID-DB-06',
+          subject: 'Database Management Systems',
+          moduleNumber: 6,
+          moduleTitle: 'Module 6: Indexing Techniques (B-Trees, B+ Trees) & Query Optimization',
+          topic: 'Clustered vs Secondary Indexes, Search Trees, Query Plans',
+          description: 'How database engines achieve logarithmic search times using balanced B+ tree index pages.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=aZjYr87r1b8',
+          duration: '38 mins',
+          instructor: 'Abdul Bari'
+        },
+
+        // Operating Systems
+        {
+          id: 'VID-OS-01',
+          subject: 'Operating Systems',
+          moduleNumber: 1,
+          moduleTitle: 'Module 1: Operating System Architectures & System Calls',
+          topic: 'Dual-Mode Execution, Microkernels vs Monolithic, Traps',
+          description: 'Introduction to operating systems, CPU modes, user/kernel transitions, and system call interfaces.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=26QPDBe-NB8',
+          duration: '1 hr 10 mins',
+          instructor: 'Neso Academy'
+        },
+        {
+          id: 'VID-OS-02',
+          subject: 'Operating Systems',
+          moduleNumber: 2,
+          moduleTitle: 'Module 2: Process Management, PCB & Context Switching',
+          topic: 'Process States (Ready, Running, Blocked), PCB, fork()',
+          description: 'Process life-cycle, process control blocks, CPU context switching overhead, and process hierarchies.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=OrM7nZcxXZU',
+          duration: '34 mins',
+          instructor: 'Gate Smashers'
+        },
+        {
+          id: 'VID-OS-03',
+          subject: 'Operating Systems',
+          moduleNumber: 3,
+          moduleTitle: 'Module 3: CPU Scheduling Algorithms (FCFS, SJF, Round Robin)',
+          topic: 'Gantt Charts, Turnaround & Waiting Time, Preemption',
+          description: 'Comparative study and calculations for uniprocessor CPU scheduling policies.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=zFnrUVqtiOY',
+          duration: '45 mins',
+          instructor: 'Neso Academy'
+        },
+        {
+          id: 'VID-OS-04',
+          subject: 'Operating Systems',
+          moduleNumber: 4,
+          moduleTitle: 'Module 4: Process Synchronization, Semaphores & Mutex Locks',
+          topic: 'Critical Section, Race Conditions, Counting Semaphores',
+          description: 'Solving mutual exclusion, classic concurrency problems (Producer-Consumer, Dining Philosophers).',
+          youtubeUrl: 'https://www.youtube.com/watch?v=ph2bu_Z2K0E',
+          duration: '48 mins',
+          instructor: 'Gate Smashers'
+        },
+        {
+          id: 'VID-OS-05',
+          subject: 'Operating Systems',
+          moduleNumber: 5,
+          moduleTitle: 'Module 5: Deadlocks (Coffman Conditions & Banker Algorithm)',
+          topic: 'Mutual Exclusion, Hold & Wait, No Preemption, Circular Wait',
+          description: 'Deadlock avoidance using Dijkstra Banker algorithm, resource allocation graphs, and recovery.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=rWFhm_iZphk',
+          duration: '42 mins',
+          instructor: 'Neso Academy'
+        },
+        {
+          id: 'VID-OS-06',
+          subject: 'Operating Systems',
+          moduleNumber: 6,
+          moduleTitle: 'Module 6: Virtual Memory, Paging & Page Replacement (FIFO, LRU)',
+          topic: 'Page Tables, TLB, Page Faults, Thrashing & Belady Anomaly',
+          description: 'How modern memory managers map virtual pages to physical frames and handle replacement policies.',
+          youtubeUrl: 'https://www.youtube.com/watch?v=qcBIvxIDCqc',
+          duration: '50 mins',
+          instructor: 'Gate Smashers'
+        }
+      ];
+
+      // Add thumbnail & embedId
+      demoVideos.forEach(v => {
+        v.embedId = extractYoutubeId(v.youtubeUrl);
+        v.thumbnail = 'https://img.youtube.com/vi/' + v.embedId + '/hqdefault.jpg';
+      });
+
+      setItem(STORAGE_KEYS.VIDEOS, demoVideos);
+    }
+
+    // 7. Settings
     if (!localStorage.getItem(STORAGE_KEYS.SETTINGS)) {
       setItem(STORAGE_KEYS.SETTINGS, { theme: 'light' });
     }
@@ -382,6 +676,39 @@
     return setItem(STORAGE_KEYS.PDFS, pdfs);
   }
 
+  
+  // --- Video Modules API ---
+  function getVideoModules() {
+    return getItem(STORAGE_KEYS.VIDEOS, []);
+  }
+
+  function getVideoModuleById(id) {
+    const list = getVideoModules();
+    return list.find(v => v.id === id) || null;
+  }
+
+  function saveVideoModule(video) {
+    const list = getVideoModules();
+    if (!video.embedId && video.youtubeUrl) {
+      video.embedId = extractYoutubeId(video.youtubeUrl);
+    }
+    if (!video.thumbnail && video.embedId) {
+      video.thumbnail = 'https://img.youtube.com/vi/' + video.embedId + '/hqdefault.jpg';
+    }
+    const idx = list.findIndex(v => v.id === video.id);
+    if (idx > -1) {
+      list[idx] = { ...list[idx], ...video };
+    } else {
+      list.unshift(video);
+    }
+    return setItem(STORAGE_KEYS.VIDEOS, list);
+  }
+
+  function deleteVideoModule(id) {
+    const list = getVideoModules().filter(v => v.id !== id);
+    return setItem(STORAGE_KEYS.VIDEOS, list);
+  }
+
   // --- Exams API ---
   function getExams() {
     return getItem(STORAGE_KEYS.EXAMS, []);
@@ -460,6 +787,7 @@
         exams: getExams(),
         results: getResults(),
         pdfs: getPdfs(),
+        videos: getVideoModules(),
         settings: getSettings()
       }
     };
@@ -477,6 +805,7 @@
     if (exams) setItem(STORAGE_KEYS.EXAMS, exams);
     if (results) setItem(STORAGE_KEYS.RESULTS, results);
     if (pdfs) setItem(STORAGE_KEYS.PDFS, pdfs);
+    if (parsed.data.videos) setItem(STORAGE_KEYS.VIDEOS, parsed.data.videos);
     if (settings) setItem(STORAGE_KEYS.SETTINGS, settings);
     return { success: true, message: 'Backup restored successfully!' };
   }
@@ -501,6 +830,11 @@
     getPdfById,
     savePdf,
     deletePdf,
+    getVideoModules,
+    getVideoModuleById,
+    saveVideoModule,
+    deleteVideoModule,
+    extractYoutubeId,
     getExams,
     getExamById,
     saveExam,
